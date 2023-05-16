@@ -1,0 +1,6 @@
+config.ini
+.env
+database.db
+*.session
+venv
+__pycache__

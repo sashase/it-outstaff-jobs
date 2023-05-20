@@ -30,29 +30,29 @@ async def connect_telegram_client():
             await client.sign_in(password=input('Password: '))
     return client
 
+two_months_ago = date.today() - timedelta(days=30)
 
-async def update_messages(source):
+
+async def update_messages(source, date):
     try:
         client = await connect_telegram_client()
 
         my_channel = await client.get_entity(source)
 
         offset_id = 0
-        limit = 100
+        limit = 1
         all_messages = []
         total_messages = 0
-        total_count_limit = 0
-        two_months_ago = date.today() - timedelta(days=60)
+        total_count_limit = 3
         end_reached = False
 
         while True:
             if end_reached == True:
                 break
-            print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
             history = await client(GetHistoryRequest(
                 peer=my_channel,
                 offset_id=offset_id,
-                offset_date=None,
+                offset_date=date,
                 add_offset=0,
                 limit=limit,
                 max_id=0,
@@ -63,19 +63,17 @@ async def update_messages(source):
                 break
             messages = history.messages
             for message in messages:
-                if message.date.date() >= two_months_ago:
-                    author = None
-                    if message.from_id:
-                        author = message.from_id.user_id
-                    print(message.id)
+                author = None
+                if message.from_id:
+                    author = message.from_id.user_id
+                if message.message != None:
                     all_messages.append(
                         {"id": message.id, "text": message.message, "date": message.date, "author": author})
-                else:
-                    end_reached = True
             offset_id = messages[len(messages) - 1].id
             total_messages = len(all_messages)
             if total_count_limit != 0 and total_messages >= total_count_limit:
                 break
+        return all_messages
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
-    return all_messages

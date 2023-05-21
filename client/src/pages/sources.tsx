@@ -23,7 +23,7 @@ export default function Sources() {
     }
   }
 
-  const handleChange = (e: any): void => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFields((prevState) => {
       if (e.target.name === "name") {
         return {
@@ -38,7 +38,7 @@ export default function Sources() {
     })
   }
 
-  const handleClick = async (e: any): Promise<void> => {
+  const handleClick = async (e: React.MouseEvent<HTMLElement>): Promise<void> => {
     e.preventDefault()
     if (fields.name === "" || fields.link === "")
       return setError("Fields can not be empty!")

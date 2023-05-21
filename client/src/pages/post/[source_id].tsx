@@ -54,7 +54,7 @@ export default function PostDetails() {
               <p>{post.text}</p>
               <div className="flex justify-between">
                 <p>
-                  Posted date: <span className="font-medium">{post.date}</span>
+                  Posted date: <span className="font-medium">{post.date.split("T")[0]}</span>
                 </p>
                 <p>
                   Author id:{" "}

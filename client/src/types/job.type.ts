@@ -7,4 +7,5 @@ export type JobType = {
   rate: number
   stack: string
   english_level: string
+  date: string
 }
